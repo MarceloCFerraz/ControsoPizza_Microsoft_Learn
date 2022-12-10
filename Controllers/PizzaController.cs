@@ -33,5 +33,44 @@ public class PizzaController : ControllerBase
         return result;
     }
 
-    
+    [HttpPost]
+    public ActionResult<Pizza> Post([FromBody] Pizza pizzaFromBody)
+    {
+        Pizza result = PizzaService.Add(pizzaFromBody);
+        return CreatedAtAction
+        (
+            nameof(Get),
+            new {id = result.Id},
+            result
+        );
+    }
+
+    [HttpPut("{id}")]
+    public ActionResult<Pizza> Put(
+        int id,
+        [FromBody] Pizza pizzaFromBody
+    )
+    {
+        ActionResult result = NotFound();
+
+        if(PizzaService.Update(id, pizzaFromBody))
+        {
+            result = NoContent();
+        }
+
+        return result;
+    }
+
+    [HttpDelete("{id}")]
+    public ActionResult<Pizza> Delete(int id)
+    {
+        ActionResult result = NotFound();
+
+        if (PizzaService.Delete(id))
+        {
+            result = NoContent();
+        }
+
+        return result;
+    }
 }

@@ -27,29 +27,40 @@ public static class PizzaService
         return Pizzas.FirstOrDefault(pizza => pizza.Id == id);
     }
 
-    public static void Add(Pizza pizza)
+    public static Pizza Add(Pizza pizza)
     {
         pizza.Id = nextId ++;
         Pizzas.Add(pizza);
+        return pizza;
     }
 
-    public static void Update(Pizza pizza)
+    public static bool Update(int id, Pizza pizza)
     {
-        var index = Pizzas.FindIndex(p => p.Id == pizza.Id);
+        bool result = false;
+        pizza.Id = id;
+        var temp = Pizzas.FindIndex(p => p.Id == id);
 
-        if (index != -1)
+        if (temp != -1)
         {
-            Pizzas[index] = pizza;
+            Pizzas[id-1] = pizza;
+            result = true;
         }
+
+        return result;
     }
 
-    public static void Delete(int id)
+    public static bool Delete(int id)
     {
+        bool result = false;
+
         Pizza? pizza = Get(id);
 
         if (pizza != null)
         {
-            Pizzas.RemoveAt(id);
+            Pizzas.RemoveAt(id-1);
+            result = true;
         }
+
+        return result;
     }
 }
